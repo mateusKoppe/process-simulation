@@ -5,9 +5,9 @@ def entrance_generate(raw: str):
     groups = re.search(entrance_regex, raw).groups()
     return {
         "type": "entrance",
-        "id": groups[0],
-        "min": groups[1],
-        "max": groups[2],
+        "id": int(groups[0]),
+        "min": int(groups[1]),
+        "max": int(groups[2]),
         "next": groups[3],
     }
 
@@ -21,34 +21,34 @@ def service_generate(raw: str):
     for service_raw in services_raw:
         service_groups = re.search(r"^(\d+):(\d+)-(\d+)$", service_raw).groups()
         attendants.append({
-            "id": service_groups[0],
-            "min": service_groups[1],
-            "max": service_groups[2],
+            "id": int(service_groups[0]),
+            "min": int(service_groups[1]),
+            "max": int(service_groups[2]),
         })
 
     return {
         "type": "service",
-        "id": groups[0],
+        "id": int(groups[0]),
         "attendants": attendants,
         "next": groups[4],
     }
 
-route_regex = r"^R(\d);((0,\d+-[CSR]\d+;?)+)$"
+route_regex = r"^R(\d);((0.\d+-[CSR]\d+;?)+)$"
 def route_generate(raw: str):
     groups = re.search(route_regex, raw).groups()
     
     routes_raw = groups[1].split(';')
     routes = []
     for route_raw in routes_raw:
-        route_groups = re.search(r"^(0,\d+)-([CRS]\d+)", route_raw).groups()
+        route_groups = re.search(r"^(0.\d+)-([CRS]\d+)", route_raw).groups()
         routes.append({
-            "percentage": route_groups[0],
+            "percentage": float(route_groups[0]),
             "next": route_groups[1],
         })
 
     return {
         "type": "route",
-        "id": groups[0],
+        "id": int(groups[0]),
         "routes": routes,
     }
 
@@ -58,7 +58,7 @@ def exit_generate(raw: str):
 
     return {
         "type": "exit",
-        "id": groups[0],
+        "id": int(groups[0]),
     }
 
 duration_regex = r"^TS=(\d+)$"
@@ -67,7 +67,7 @@ def duration_generate(raw: str):
     
     return {
         "type": "duration",
-        "value": groups[0],
+        "value": int(groups[0]),
     }
 
 entities_models = {
@@ -98,6 +98,28 @@ def line_to_entity(line: str) -> dict:
         if re.search(data["regex"], line):
             return data["generate"](line)
 
-def lines_to_entities(inputs: list = []) -> dict:
-    for input in inputs:
-        print(line_to_entity(input))
+def lines_to_entities(lines: list = []) -> dict:
+    entities = {
+        "entrances": {},
+        "services": {},
+        "routes": {},
+        "exits": {},
+        "duration": None
+    }
+    types_to_keys = {
+        "entrance": "entrances",
+        "service": "services",
+        "route":"routes",
+        "exit":"exits",
+    }
+    for line in lines:
+        entity = line_to_entity(line)
+
+        try:
+            key = types_to_keys[entity["type"]]
+            entities[key][entity["id"]] = entity
+        except KeyError:
+            if entity["type"] == "duration":
+                entities["duration"] = entity
+        
+    return entities
