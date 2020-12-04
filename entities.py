@@ -1,5 +1,22 @@
 import re
 
+def format_next(next: str) -> dict:
+    type_table = {
+        "G": "entrance",
+        "C": "service",
+        "R": "route",
+        "S": "exit"
+    }
+
+    for key, description in type_table.items():
+        if (next.startswith(key)):
+            return {
+                "type": description,
+                "id": int(next[1:])
+            }
+
+    raise Exception("Invalid next")
+
 entrance_regex = r"^G(\d):(\d+)-(\d+);([CRS]\d+)$"
 def entrance_generate(raw: str):
     groups = re.search(entrance_regex, raw).groups()
@@ -8,7 +25,7 @@ def entrance_generate(raw: str):
         "id": int(groups[0]),
         "min": int(groups[1]),
         "max": int(groups[2]),
-        "next": groups[3],
+        "next": format_next(groups[3]),
     }
 
 service_regex = r"^C(\d);(\d+);((\d+:\d+-\d+,?)+);([CRS]\d+)$"
@@ -30,7 +47,7 @@ def service_generate(raw: str):
         "type": "service",
         "id": int(groups[0]),
         "attendants": attendants,
-        "next": groups[4],
+        "next": format_next(groups[4]),
     }
 
 route_regex = r"^R(\d);((0.\d+-[CSR]\d+;?)+)$"
@@ -43,7 +60,7 @@ def route_generate(raw: str):
         route_groups = re.search(r"^(0.\d+)-([CRS]\d+)", route_raw).groups()
         routes.append({
             "percentage": float(route_groups[0]),
-            "next": route_groups[1],
+            "next": format_next(route_groups[1]),
         })
 
     return {
