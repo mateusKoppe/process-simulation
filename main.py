@@ -25,10 +25,16 @@ def add_unit(events: dict, unit: dict, when) -> dict:
 
 def unit_update_next(unit: dict, next, clock):
     _unit = unit.copy()
-    _unit["history"][clock] = {
+
+    try:
+        _unit["history"][clock]
+    except KeyError:
+        _unit["history"][clock] = []
+
+    _unit["history"][clock].append({
         "type": _unit["next"]["type"],
         "id": _unit["next"]["id"]
-    }
+    })
     if next:
         _unit["next"] = {
             "type": next["type"],
@@ -54,6 +60,27 @@ def handle_next_event(simulation, units, unit: dict, clock: int) -> dict:
         _unit = unit_update_next(unit, component["next"], clock)
         _units = add_unit(_units, _unit, when)
         return _units, when
+
+    if (_unit["next"]["type"] == "route"):
+        component = simulation["routes"][_unit["next"]["id"]]
+        
+        sum = 0
+        for route in component["routes"]:
+            sum += route["percentage"]
+
+        pick_value = random.random() * sum
+        percentage_acc = 0
+        selected_route = None
+        for route in component["routes"]:
+            percentage_acc += route["percentage"]
+            if pick_value <= percentage_acc:
+                selected_route = route
+                break
+
+        _unit = unit_update_next(unit, selected_route["next"], clock)
+        _units = add_unit(_units, _unit, clock)
+        return _units, clock
+
 
     if (_unit["next"]["type"] == "exit"):
         _unit = unit_update_next(unit, None, clock)
@@ -91,10 +118,10 @@ def generete_entrances(entrances, duration):
                 "id": str(uuid4()),
                 "next": entrance["next"],
                 "history": {
-                    entrance_duration: {
+                    entrance_duration: [{
                         "type": entrance["type"],
                         "id": entrance["id"],
-                    }
+                    }]
                 }
             }
             events = add_unit(events, unit, entrance_duration)
