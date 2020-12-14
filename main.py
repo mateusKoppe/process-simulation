@@ -3,7 +3,7 @@ from uuid import uuid4
 from entities import lines_to_entities
 import json
 
-def get_inputs() -> list:
+def get_inputs():
     lines = []
     while True:
         try:
@@ -13,7 +13,7 @@ def get_inputs() -> list:
             break
     return lines
 
-def add_unit(events: dict, unit: dict, when) -> dict:
+def add_unit(events, unit, when):
     _events = events.copy()
     try:
         _events[when]
@@ -23,7 +23,7 @@ def add_unit(events: dict, unit: dict, when) -> dict:
     _events[when].append(unit)
     return _events
 
-def unit_update_next(unit: dict, next, clock):
+def unit_update_next(unit, next, clock):
     _unit = unit.copy()
 
     try:
@@ -49,7 +49,7 @@ Convert events to unit this with a history and when they exit add that in the hi
 """
 
 # TODO: Handle invalid ID
-def handle_next_event(simulation, units, unit: dict, clock: int) -> dict:
+def handle_next_event(simulation, units, unit, clock):
     _unit = unit.copy()
     _units = units.copy()
 
@@ -89,7 +89,7 @@ def handle_next_event(simulation, units, unit: dict, clock: int) -> dict:
     return _units, clock
     
 
-def run_entrances(simulation, units: dict) -> dict:
+def run_entrances(simulation, units):
     _units = units.copy()
     clock = 1
     clock_limit = list(_units.keys()).pop()
@@ -129,7 +129,7 @@ def generete_entrances(entrances, duration):
 
     return events
 
-def run_simulation(inputs: list = []):
+def run_simulation(inputs = []):
     simulation = lines_to_entities(inputs)
 
     units = generete_entrances(simulation["entrances"], simulation["duration"]["value"])

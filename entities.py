@@ -1,6 +1,6 @@
 import re
 
-def format_next(next: str) -> dict:
+def format_next(next):
     type_table = {
         "G": "entrance",
         "C": "service",
@@ -18,7 +18,7 @@ def format_next(next: str) -> dict:
     raise Exception("Invalid next")
 
 entrance_regex = r"^G(\d):(\d+)-(\d+);([CRS]\d+)$"
-def entrance_generate(raw: str):
+def entrance_generate(raw):
     groups = re.search(entrance_regex, raw).groups()
     return {
         "type": "entrance",
@@ -29,7 +29,7 @@ def entrance_generate(raw: str):
     }
 
 service_regex = r"^C(\d);(\d+);((\d+:\d+-\d+,?)+);([CRS]\d+)$"
-def service_generate(raw: str):
+def service_generate(raw):
     groups = re.search(service_regex, raw).groups()
 
     services_raw = groups[2].split(',')
@@ -51,7 +51,7 @@ def service_generate(raw: str):
     }
 
 route_regex = r"^R(\d);((0.\d+-[CSR]\d+;?)+)$"
-def route_generate(raw: str):
+def route_generate(raw):
     groups = re.search(route_regex, raw).groups()
     
     routes_raw = groups[1].split(';')
@@ -70,7 +70,7 @@ def route_generate(raw: str):
     }
 
 exit_regex = r"^S(\d+)$"
-def exit_generate(raw: str):
+def exit_generate(raw):
     groups = re.search(exit_regex, raw).groups()
 
     return {
@@ -79,7 +79,7 @@ def exit_generate(raw: str):
     }
 
 duration_regex = r"^TS=(\d+)$"
-def duration_generate(raw: str):
+def duration_generate(raw):
     groups = re.search(duration_regex, raw).groups()
     
     return {
@@ -110,12 +110,12 @@ entities_models = {
     }
 }
 
-def line_to_entity(line: str) -> dict:
+def line_to_entity(line):
     for data in entities_models.values():
         if re.search(data["regex"], line):
             return data["generate"](line)
 
-def lines_to_entities(lines: list = []) -> dict:
+def lines_to_entities(lines = []):
     entities = {
         "entrances": {},
         "services": {},
