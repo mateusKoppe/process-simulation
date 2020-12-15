@@ -8,7 +8,7 @@ def is_entrance(str):
     return re.search(entrance_regex, str)
 
 
-def entrance_generate(raw):
+def generate_entrance(raw):
     groups = re.search(entrance_regex, raw).groups()
     return {
         "type": "entrance",

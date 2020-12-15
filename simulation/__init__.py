@@ -1,7 +1,7 @@
-from .components.entrance import entrance_generate, is_entrance
-from .components.service import service_generate, is_service, process_service
-from .components.exit import exit_generate, is_exit, process_exit
-from .components.route import route_generate, is_route, process_route
+from .components.entrance import generate_entrance, is_entrance
+from .components.service import generate_service, is_service, process_service
+from .components.exit import generate_exit, is_exit, process_exit
+from .components.route import generate_route, is_route, process_route
 from .components.duration import duration_generate, is_duration
 from .units import generete_entrances
 import json
@@ -9,19 +9,19 @@ import json
 entities_models = {
     "entrance": {
         "is": is_entrance,
-        "generate": entrance_generate,
+        "generate": generate_entrance,
     },
     "service": {
         "is": is_service,
-        "generate": service_generate,
+        "generate": generate_service,
     },
     "route": {
         "is": is_route,
-        "generate": route_generate,
+        "generate": generate_route,
     },
     "exit": {
         "is": is_exit,
-        "generate": exit_generate,
+        "generate": generate_exit,
     },
     "duration": {
         "is": is_duration,
@@ -70,47 +70,46 @@ Convert events to unit this with a history and when they exit add that in the hi
 # TODO: Handle invalid ID
 
 
-def handle_next_event(simulation, units, unit, clock):
+def handle_next_event(simulation, unit):
+    _simulation = simulation.copy()
     _unit = unit.copy()
-    _units = units.copy()
 
     if (_unit["next"]["type"] == "service"):
-        _units, clock = process_service(simulation, _units, _unit, clock)
+        _simulation = process_service(_simulation, _unit)
 
     if (_unit["next"]["type"] == "route"):
-        _units, clock = process_route(simulation, _units, _unit, clock)
+        _simulation = process_route(_simulation, _unit)
 
     if (_unit["next"]["type"] == "exit"):
-        _units, clock = process_exit(simulation, _units, _unit, clock)
+        _simulation = process_exit(_simulation, _unit)
 
-    return _units, clock
+    return _simulation
 
 
-def run_entrances(simulation, units):
-    _units = units.copy()
-    clock = 1
-    clock_limit = list(_units.keys()).pop()
+def run_entrances(simulation):
+    _simulation = simulation.copy()
+    units = _simulation["events"].copy()
+    _simulation["clock"] = 1
+    _simulation["clock_limit"] = list(units.keys()).pop()
 
-    while clock <= clock_limit:
+    while _simulation["clock"] <= _simulation["clock_limit"]:
         while True:
             try:
-                unit = _units[clock].pop()
-                _units, when = handle_next_event(
-                    simulation, _units, unit, clock)
-                clock_limit = when if when > clock_limit else clock_limit
+                unit = _simulation["events"][_simulation["clock"]].pop()
+                _simulation = handle_next_event(_simulation, unit)
             except:
                 break
 
-        clock += 1
+        _simulation["clock"] += 1
 
-    return _units["done"]
+    return _simulation["events"]["done"]
 
 
 def run_simulation(inputs=[]):
     simulation = lines_to_entities(inputs)
 
-    units = generete_entrances(simulation)
+    simulation["events"] = generete_entrances(simulation)
 
-    finished_units = run_entrances(simulation, units)
+    finished_units = run_entrances(simulation)
     print("---- finished -----")
     print(json.dumps(finished_units, indent=True))

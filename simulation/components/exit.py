@@ -8,7 +8,7 @@ def is_exit(str):
     return re.search(exit_regex, str)
 
 
-def exit_generate(raw):
+def generate_exit(raw):
     groups = re.search(exit_regex, raw).groups()
 
     return {
@@ -17,7 +17,8 @@ def exit_generate(raw):
     }
 
 
-def process_exit(simulation, units, unit, clock):
-    _unit = unit_update_next(unit, None, clock)
-    _units = add_unit(units, _unit, "done")
-    return _units, clock
+def process_exit(simulation, unit):
+    _simulation = simulation.copy()
+    _unit = unit_update_next(unit, None, _simulation["clock"])
+    _simulation["events"] = add_unit(_simulation["events"], _unit, "done")
+    return _simulation

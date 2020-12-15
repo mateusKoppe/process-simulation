@@ -10,7 +10,7 @@ def is_service(str):
     return re.search(service_regex, str)
 
 
-def service_generate(raw):
+def generate_service(raw):
     groups = re.search(service_regex, raw).groups()
 
     services_raw = groups[2].split(',')
@@ -33,11 +33,21 @@ def service_generate(raw):
     }
 
 
-def process_service(simulation, units, unit, clock):
-    component = simulation["services"][unit["next"]["id"]]
+def process_service(simulation, unit):
+    _simulation = simulation.copy()
+
+    component = _simulation["services"][unit["next"]["id"]]
+
+    attendants = component["attendants"].copy()
+    random.shuffle(attendants)
+
     interval = random.randint(
-        component["attendants"][0]["min"], component["attendants"][0]["max"])
-    when = interval + clock
-    _unit = unit_update_next(unit, component["next"], clock)
-    _units = add_unit(units, _unit, when)
-    return _units, when
+        attendants[0]["min"], attendants[0]["max"])
+
+    when = interval + _simulation["clock"]
+    if when > _simulation["clock_limit"]:
+        _simulation["clock_limit"] = when
+
+    _unit = unit_update_next(unit, component["next"], _simulation["clock"])
+    _simulation["events"] = add_unit(_simulation["events"], _unit, when)
+    return _simulation

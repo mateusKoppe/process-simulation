@@ -10,7 +10,7 @@ def is_route(str):
     return re.search(route_regex, str)
 
 
-def route_generate(raw):
+def generate_route(raw):
     groups = re.search(route_regex, raw).groups()
 
     routes_raw = groups[1].split(';')
@@ -29,8 +29,9 @@ def route_generate(raw):
     }
 
 
-def process_route(simulation, units, unit, clock):
-    component = simulation["routes"][unit["next"]["id"]]
+def process_route(simulation, unit):
+    _simulation = simulation.copy();
+    component = _simulation["routes"][unit["next"]["id"]]
 
     sum = 0
     for route in component["routes"]:
@@ -45,6 +46,6 @@ def process_route(simulation, units, unit, clock):
             selected_route = route
             break
 
-    _unit = unit_update_next(unit, selected_route["next"], clock)
-    _units = add_unit(units, _unit, clock)
-    return _units, clock
+    _unit = unit_update_next(unit, selected_route["next"], _simulation["clock"])
+    _simulation["events"] = add_unit(_simulation["events"], _unit, _simulation["clock"])
+    return _simulation
