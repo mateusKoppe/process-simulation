@@ -74,7 +74,8 @@ def process_service_free_attendant(simulation, unit):
     component["attendants"] = update_attendants(component["attendants"], _simulation["clock"])
 
     try:
-        unit = component["queue"].pop()
+        unit = component["queue"][0]
+        del component["queue"][0]
         return process_service_schedule(_simulation, unit)
     except (IndexError, KeyError):
         pass
