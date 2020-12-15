@@ -97,7 +97,7 @@ def run_entrances(simulation):
             try:
                 unit = _simulation["events"][_simulation["clock"]].pop()
                 _simulation = handle_next_event(_simulation, unit)
-            except:
+            except (KeyError, IndexError):
                 break
 
         _simulation["clock"] += 1

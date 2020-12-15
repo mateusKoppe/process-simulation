@@ -17,11 +17,11 @@ def unit_update_next(unit, next, clock):
     _unit = unit.copy()
 
     try:
-        _unit["history"][clock]
+        _unit["unit"]["history"][clock]
     except KeyError:
-        _unit["history"][clock] = []
+        _unit["unit"]["history"][clock] = []
 
-    _unit["history"][clock].append({
+    _unit["unit"]["history"][clock].append({
         "type": _unit["next"]["type"],
         "id": _unit["next"]["id"]
     })
@@ -45,13 +45,15 @@ def generete_entrances(simulation):
         while entrance_duration <= duration:
             interval = random.randint(entrance["min"], entrance["max"])
             unit = {
-                "id": str(uuid4()),
                 "next": entrance["next"],
-                "history": {
-                    entrance_duration: [{
-                        "type": entrance["type"],
-                        "id": entrance["id"],
-                    }]
+                "unit": {
+                    "id": str(uuid4()),
+                    "history": {
+                        entrance_duration: [{
+                            "type": entrance["type"],
+                            "id": entrance["id"],
+                        }]
+                    }
                 }
             }
             events = add_unit(events, unit, entrance_duration)

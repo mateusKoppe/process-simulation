@@ -3,6 +3,11 @@ import random
 from ..utils import format_next
 from ..units import unit_update_next, add_unit
 
+
+class NoAttendantAvailable(Exception):
+    pass
+
+
 service_regex = r"^C(\d);(\d+);((\d+:\d+-\d+,?)+);([CRS]\d+)$"
 
 
@@ -33,21 +38,105 @@ def generate_service(raw):
     }
 
 
-def process_service(simulation, unit):
+def update_attendants(attendants, clock):
+    _attendants = attendants.copy()
+    for attendant in _attendants:
+        try:
+            if attendant["available_at"] <= clock:
+                del attendant["available_at"]
+        except KeyError:
+            pass
+
+    return _attendants
+
+
+def get_avaiable_attendant(attendants):
+    _attendants = attendants.copy()
+    random.shuffle(_attendants)
+
+    selected_attendant = None
+    for attendant in _attendants:
+        try:
+            attendant["available_at"]
+        except KeyError:
+            selected_attendant = attendant
+            break
+
+    if not selected_attendant:
+        raise NoAttendantAvailable()
+
+    return _attendants[0]
+
+
+def process_service_free_attendant(simulation, unit):
     _simulation = simulation.copy()
-
     component = _simulation["services"][unit["next"]["id"]]
+    component["attendants"] = update_attendants(component["attendants"], _simulation["clock"])
 
-    attendants = component["attendants"].copy()
-    random.shuffle(attendants)
+    try:
+        unit = component["queue"].pop()
+        return process_service_schedule(_simulation, unit)
+    except (IndexError, KeyError):
+        pass
 
-    interval = random.randint(
-        attendants[0]["min"], attendants[0]["max"])
-
-    when = interval + _simulation["clock"]
-    if when > _simulation["clock_limit"]:
-        _simulation["clock_limit"] = when
-
-    _unit = unit_update_next(unit, component["next"], _simulation["clock"])
-    _simulation["events"] = add_unit(_simulation["events"], _unit, when)
     return _simulation
+
+
+def process_service_schedule(simulation, unit):
+    _simulation = simulation.copy()
+    _unit = unit.copy()
+    component = _simulation["services"][_unit["next"]["id"]]
+    clock = _simulation["clock"]
+
+    attendants = update_attendants(
+        component["attendants"], clock)
+
+    try:
+        attendant = get_avaiable_attendant(attendants)
+        interval = random.randint(attendant["min"], attendant["max"])
+
+        when = interval + clock
+        if when > _simulation["clock_limit"]:
+            _simulation["clock_limit"] = when
+
+        attendant["available_at"] = when
+        component["attendants"] = [
+            a if a["id"] != attendant["id"] else attendant for a in attendants
+        ]
+
+        _unit = unit_update_next(_unit, component["next"], clock)
+        _simulation["events"] = add_unit(_simulation["events"], _unit, when)
+        _simulation["events"] = add_unit(_simulation["events"], {
+            "next": {
+                "type": 'service',
+                "id": component["id"],
+                "action": "free_attendant",
+                "attendant": attendant
+            }
+        }, when)
+    except NoAttendantAvailable:
+        history = {
+            "type": "service",
+            "action": "queue",
+            "id": _unit["next"]["id"]
+        }
+        try:
+            _unit["unit"]["history"][clock].append(history)
+        except KeyError:
+            _unit["unit"]["history"][clock] = [history]
+
+        try:
+            component["queue"].append(_unit)
+        except KeyError:
+            component["queue"] = [_unit]
+
+    return _simulation
+
+
+def process_service(simulation, unit):
+    try:
+        action = unit["next"]["action"]
+        if action == "free_attendant":
+            return process_service_free_attendant(simulation, unit)
+    except KeyError:
+        return process_service_schedule(simulation, unit)
