@@ -2,11 +2,11 @@ from .components.entrance import generate_entrance, is_entrance
 from .components.service import generate_service, is_service, process_service
 from .components.exit import generate_exit, is_exit, process_exit
 from .components.route import generate_route, is_route, process_route
-from .components.duration import duration_generate, is_duration
+from .components.duration import generate_duration, is_duration
 from .units import generete_entrances
 import json
 
-entities_models = {
+components_models = {
     "entrance": {
         "is": is_entrance,
         "generate": generate_entrance,
@@ -25,18 +25,18 @@ entities_models = {
     },
     "duration": {
         "is": is_duration,
-        "generate": duration_generate,
+        "generate": generate_duration,
     }
 }
 
 
-def line_to_entity(line):
-    for data in entities_models.values():
+def line_to_component(line):
+    for data in components_models.values():
         if data["is"](line):
             return data["generate"](line)
 
 
-def lines_to_entities(lines=[]):
+def lines_to_component(lines=[]):
     entities = {
         "entrances": {},
         "services": {},
@@ -51,7 +51,7 @@ def lines_to_entities(lines=[]):
         "exit": "exits",
     }
     for line in lines:
-        entity = line_to_entity(line)
+        entity = line_to_component(line)
 
         try:
             key = types_to_keys[entity["type"]]
@@ -61,13 +61,6 @@ def lines_to_entities(lines=[]):
                 entities["duration"] = entity
 
     return entities
-
-
-"""
-Convert events to unit this with a history and when they exit add that in the history_list
-"""
-
-# TODO: Handle invalid ID
 
 
 def handle_next_event(simulation, unit):
@@ -106,7 +99,7 @@ def run_entrances(simulation):
 
 
 def run_simulation(inputs=[]):
-    simulation = lines_to_entities(inputs)
+    simulation = lines_to_component(inputs)
 
     simulation["events"] = generete_entrances(simulation)
 
