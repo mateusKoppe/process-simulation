@@ -1,4 +1,6 @@
 from simulation import run_simulation
+from reports import get_units_stats
+import json
 
 
 def get_inputs():
@@ -12,4 +14,5 @@ def get_inputs():
     return lines
 
 
-run_simulation(get_inputs())
+simulation_result = run_simulation(get_inputs())
+print(json.dumps(get_units_stats(simulation_result), indent=True))

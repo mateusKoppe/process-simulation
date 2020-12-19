@@ -4,7 +4,6 @@ from .components.exit import generate_exit, is_exit, process_exit
 from .components.route import generate_route, is_route, process_route
 from .components.duration import generate_duration, is_duration
 from .units import generete_entrances
-import json
 
 components_models = {
     "entrance": {
@@ -95,7 +94,7 @@ def run_entrances(simulation):
 
         _simulation["clock"] += 1
 
-    return _simulation["events"]["done"]
+    return _simulation
 
 
 def run_simulation(inputs=[]):
@@ -103,6 +102,5 @@ def run_simulation(inputs=[]):
 
     simulation["events"] = generete_entrances(simulation)
 
-    finished_units = run_entrances(simulation)
-    print("---- finished -----")
-    print(json.dumps(finished_units, indent=True))
+    simulation = run_entrances(simulation)
+    return [event["unit"] for event in simulation["events"]["done"]]
