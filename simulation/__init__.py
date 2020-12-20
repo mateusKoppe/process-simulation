@@ -4,6 +4,7 @@ from .components.exit import generate_exit, is_exit, process_exit
 from .components.route import generate_route, is_route, process_route
 from .components.duration import generate_duration, is_duration
 from .units import generete_entrances
+from .utils import format_events
 
 components_models = {
     "entrance": {
@@ -103,4 +104,8 @@ def run_simulation(inputs=[]):
     simulation["events"] = generete_entrances(simulation)
 
     simulation = run_entrances(simulation)
-    return [event["unit"] for event in simulation["events"]["done"]]
+
+    return [{
+        "id": event["unit"]["id"],
+        "history": format_events(event["unit"]["history"])
+    } for event in simulation["events"]["done"]]
