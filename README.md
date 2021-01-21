@@ -2,7 +2,7 @@
 
 Running:
 ```bash
-python main.py < input.txt
+python main.py < input.txt > output.json
 ```
 
 Testing:

@@ -1,0 +1,469 @@
+{
+ "unitsFlow": [
+  {
+   "id": "05532bbe-743a-4f10-8092-28e9acccdcfa",
+   "history": [
+    {
+     "type": "entrance",
+     "id": 1,
+     "at": 1,
+     "duration": 0
+    },
+    {
+     "type": "service",
+     "id": 1,
+     "at": 1,
+     "duration": 15
+    },
+    {
+     "type": "service",
+     "id": 2,
+     "at": 16,
+     "duration": 8
+    },
+    {
+     "type": "route",
+     "id": 1,
+     "at": 24,
+     "duration": 0
+    },
+    {
+     "type": "exit",
+     "id": 1,
+     "at": 24
+    }
+   ]
+  },
+  {
+   "id": "05aec64f-1b67-47cb-ac2a-9afab95e457a",
+   "history": [
+    {
+     "type": "entrance",
+     "id": 1,
+     "at": 6,
+     "duration": 0
+    },
+    {
+     "type": "service",
+     "action": "queue",
+     "id": 1,
+     "at": 6,
+     "duration": 10
+    },
+    {
+     "type": "service",
+     "id": 1,
+     "at": 16,
+     "duration": 10
+    },
+    {
+     "type": "service",
+     "id": 2,
+     "at": 26,
+     "duration": 13
+    },
+    {
+     "type": "route",
+     "id": 1,
+     "at": 39,
+     "duration": 0
+    },
+    {
+     "type": "exit",
+     "id": 1,
+     "at": 39
+    }
+   ]
+  },
+  {
+   "id": "ec49b718-efa5-415b-8151-e93e7bc0d3fa",
+   "history": [
+    {
+     "type": "entrance",
+     "id": 1,
+     "at": 9,
+     "duration": 0
+    },
+    {
+     "type": "service",
+     "action": "queue",
+     "id": 1,
+     "at": 9,
+     "duration": 17
+    },
+    {
+     "type": "service",
+     "id": 1,
+     "at": 26,
+     "duration": 14
+    },
+    {
+     "type": "service",
+     "id": 2,
+     "at": 40,
+     "duration": 13
+    },
+    {
+     "type": "route",
+     "id": 1,
+     "at": 53,
+     "duration": 0
+    },
+    {
+     "type": "exit",
+     "id": 1,
+     "at": 53
+    }
+   ]
+  },
+  {
+   "id": "7977aa8a-00e8-477e-b997-fcd2163ad074",
+   "history": [
+    {
+     "type": "entrance",
+     "id": 1,
+     "at": 31,
+     "duration": 0
+    },
+    {
+     "type": "service",
+     "action": "queue",
+     "id": 1,
+     "at": 31,
+     "duration": 21
+    },
+    {
+     "type": "service",
+     "id": 1,
+     "at": 52,
+     "duration": 20
+    },
+    {
+     "type": "service",
+     "id": 2,
+     "at": 72,
+     "duration": 15
+    },
+    {
+     "type": "route",
+     "id": 1,
+     "at": 87,
+     "duration": 0
+    },
+    {
+     "type": "service",
+     "action": "queue",
+     "id": 1,
+     "at": 87,
+     "duration": 11
+    },
+    {
+     "type": "service",
+     "id": 1,
+     "at": 98,
+     "duration": 12
+    },
+    {
+     "type": "service",
+     "id": 2,
+     "at": 110,
+     "duration": 12
+    },
+    {
+     "type": "route",
+     "id": 1,
+     "at": 122,
+     "duration": 0
+    },
+    {
+     "type": "exit",
+     "id": 1,
+     "at": 122
+    }
+   ]
+  },
+  {
+   "id": "8c409338-4836-4867-9554-3f447e08ab96",
+   "history": [
+    {
+     "type": "entrance",
+     "id": 1,
+     "at": 45,
+     "duration": 0
+    },
+    {
+     "type": "service",
+     "action": "queue",
+     "id": 1,
+     "at": 45,
+     "duration": 27
+    },
+    {
+     "type": "service",
+     "id": 1,
+     "at": 72,
+     "duration": 14
+    },
+    {
+     "type": "service",
+     "id": 2,
+     "at": 86,
+     "duration": 15
+    },
+    {
+     "type": "route",
+     "id": 1,
+     "at": 101,
+     "duration": 0
+    },
+    {
+     "type": "service",
+     "action": "queue",
+     "id": 1,
+     "at": 101,
+     "duration": 9
+    },
+    {
+     "type": "service",
+     "id": 1,
+     "at": 110,
+     "duration": 15
+    },
+    {
+     "type": "service",
+     "id": 2,
+     "at": 125,
+     "duration": 13
+    },
+    {
+     "type": "route",
+     "id": 1,
+     "at": 138,
+     "duration": 0
+    },
+    {
+     "type": "exit",
+     "id": 1,
+     "at": 138
+    }
+   ]
+  },
+  {
+   "id": "34d12645-1bff-4e17-9a01-9a93f8d9ed83",
+   "history": [
+    {
+     "type": "entrance",
+     "id": 1,
+     "at": 25,
+     "duration": 0
+    },
+    {
+     "type": "service",
+     "action": "queue",
+     "id": 1,
+     "at": 25,
+     "duration": 15
+    },
+    {
+     "type": "service",
+     "id": 1,
+     "at": 40,
+     "duration": 12
+    },
+    {
+     "type": "service",
+     "id": 2,
+     "at": 52,
+     "duration": 12
+    },
+    {
+     "type": "route",
+     "id": 1,
+     "at": 64,
+     "duration": 0
+    },
+    {
+     "type": "service",
+     "action": "queue",
+     "id": 1,
+     "at": 64,
+     "duration": 22
+    },
+    {
+     "type": "service",
+     "id": 1,
+     "at": 86,
+     "duration": 12
+    },
+    {
+     "type": "service",
+     "id": 2,
+     "at": 98,
+     "duration": 9
+    },
+    {
+     "type": "route",
+     "id": 1,
+     "at": 107,
+     "duration": 0
+    },
+    {
+     "type": "service",
+     "action": "queue",
+     "id": 1,
+     "at": 107,
+     "duration": 18
+    },
+    {
+     "type": "service",
+     "id": 1,
+     "at": 125,
+     "duration": 19
+    },
+    {
+     "type": "service",
+     "id": 2,
+     "at": 144,
+     "duration": 12
+    },
+    {
+     "type": "route",
+     "id": 1,
+     "at": 156,
+     "duration": 0
+    },
+    {
+     "type": "exit",
+     "id": 1,
+     "at": 156
+    }
+   ]
+  }
+ ],
+ "unitsStats": [
+  {
+   "time_spent": 23,
+   "time_in_queue": 0,
+   "queues": []
+  },
+  {
+   "time_spent": 33,
+   "time_in_queue": 10,
+   "queues": [
+    {
+     "type": "service",
+     "id": 1,
+     "at": 6,
+     "duration": 10
+    }
+   ]
+  },
+  {
+   "time_spent": 44,
+   "time_in_queue": 17,
+   "queues": [
+    {
+     "type": "service",
+     "id": 1,
+     "at": 9,
+     "duration": 17
+    }
+   ]
+  },
+  {
+   "time_spent": 91,
+   "time_in_queue": 32,
+   "queues": [
+    {
+     "type": "service",
+     "id": 1,
+     "at": 31,
+     "duration": 21
+    },
+    {
+     "type": "service",
+     "id": 1,
+     "at": 87,
+     "duration": 11
+    }
+   ]
+  },
+  {
+   "time_spent": 93,
+   "time_in_queue": 36,
+   "queues": [
+    {
+     "type": "service",
+     "id": 1,
+     "at": 45,
+     "duration": 27
+    },
+    {
+     "type": "service",
+     "id": 1,
+     "at": 101,
+     "duration": 9
+    }
+   ]
+  },
+  {
+   "time_spent": 131,
+   "time_in_queue": 55,
+   "queues": [
+    {
+     "type": "service",
+     "id": 1,
+     "at": 25,
+     "duration": 15
+    },
+    {
+     "type": "service",
+     "id": 1,
+     "at": 64,
+     "duration": 22
+    },
+    {
+     "type": "service",
+     "id": 1,
+     "at": 107,
+     "duration": 18
+    }
+   ]
+  }
+ ],
+ "componentsStats": {
+  "entrances": {
+   "1": {
+    "first_entrance": 1,
+    "last_entrance": 45,
+    "attendances": 6
+   }
+  },
+  "services": {
+   "1": {
+    "first_entrance": 1,
+    "last_entrance": 125,
+    "attendances": 10,
+    "attending_time": 143,
+    "average_waiting_time": 16.666666666666668,
+    "probability_of_waiting": 0.9,
+    "biggest_waiting_time": 27,
+    "average_service_duration": 14.3
+   }
+  },
+  "routes": {
+   "1": {
+    "first_entrance": 24,
+    "last_entrance": 156,
+    "attendances": 10
+   }
+  },
+  "exits": {
+   "1": {
+    "first_entrance": 24,
+    "last_entrance": 156,
+    "attendances": 6
+   }
+  }
+ }
+}
